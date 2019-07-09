@@ -1,7 +1,6 @@
 #!/bin/bash
 echo ">>> Installing MariaDB"
 
-
 # default version
 MARIADB_VERSION='10.4'
 ROOT_PASS='root'
@@ -23,9 +22,9 @@ sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_pas
 # -qq implies -y --force-yes
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq mariadb-server
 
-# Make Maria connectable from outside world without SSH tunnel
-# enable remote access
-# setting the mysql bind-address to allow connections from everywhere
+
+echo ">>> Reconfigurate MariaDB"
+
 sudo sed -i "s/bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 
 sudo sed -i 's,^#max_connections.*$,max_connections = 300M\ninnodb_buffer_pool_size = 4G\ninnodb_log_file_size = 1G,' /etc/mysql/mariadb.conf.d/50-server.cnf
@@ -42,12 +41,13 @@ sudo sed -i "s/^query_cache_size.*/query_cache_size = 512M/" /etc/mysql/mariadb.
 
 # adding grant privileges to mysql root user from everywhere
 # thx to http://stackoverflow.com/questions/7528967/how-to-grant-mysql-privileges-in-a-bash-script for this
-MYSQL=`which mysql`
+#MYSQL=`which mysql`
 
-Q1="GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '$ROOT_PASS' WITH GRANT OPTION;"
-Q2="FLUSH PRIVILEGES;"
-SQL="${Q1}${Q2}"
+#Q1="GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '$ROOT_PASS' WITH GRANT OPTION;"
+#Q2="FLUSH PRIVILEGES;"
+#SQL="${Q1}${Q2}"
 
-sudo $MYSQL -uroot -p$ROOT_PASS -e "$SQL"
+#sudo $MYSQL -uroot -p$ROOT_PASS -e "$SQL"
+echo ">>> Restart MariaDB"
 
 sudo service mysql restart
