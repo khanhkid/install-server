@@ -10,7 +10,7 @@ export LC_ALL="en_US.UTF-8"
 # Import repo key
 sudo apt-get install -y software-properties-common dirmngr
 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
-sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://download.nus.edu.sg/mirror/mariadb/repo/$MARIADB_VERSION/debian stretch main'
+sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://download.nus.edu.sg/mirror/mariadb/repo/$MARIADB_VERSION/debian stretch main"
 
 # Update
 sudo apt-get update
